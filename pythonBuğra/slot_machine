@@ -1,0 +1,91 @@
+import random
+max_lines = 3
+min_bet = 10
+max_bet = 10000
+rows = 3
+cols = 3
+
+symbol_count = {
+    "\U0001F347":2,
+    "\U0001F349":4,
+    "\U0001F34C":6,
+    "\U0001F34D":8,
+    "\U0001F34E":10,
+    "\U0001F342":12,
+}
+def generate_slot():
+    return [random.choice(list(symbol_count.keys())) for _ in range(cols)]
+
+def get_slot_machine_spin(rows, cols, symbols):
+    all_symbols = []
+    for symbol, count in symbols.items():
+        all_symbols.extend([symbol] * count)
+    columns = []
+    for _ in range(cols):
+        column = random.sample(all_symbols, rows)
+        columns.append(column)
+    return columns
+        
+def deposit():
+    while True:
+        amount = input("Ne kadar yatırmak istersiniz : ₺")
+        if amount.isdigit():
+            amount = int(amount)
+            if amount >0:
+                break
+            
+            else:
+                print("Girilen değer sıfırdan büyük olmalı!!!")
+        else:
+            print("Lütfen yatıracağınız tutarı rakam ile giriniz.")
+    return amount
+
+
+
+def get_number_of_lines():
+    while True:
+        lines = input("Bahis yapacağınız satır sayısı : (1 - " + str(max_lines) + ")? " )
+        if lines.isdigit():
+            lines = int(lines)
+            if 1<= lines <=max_lines:
+                break
+            
+            else:
+                print("Girilen değer geçerli olmalı!!!")
+        else:
+            print("Lütfen rakam ile giriniz.")
+    return lines
+
+def get_bet():
+    while True:
+        amount = input("Ne kadar bahis yapmak istersiniz : ₺")
+        if amount.isdigit():
+            amount = int(amount)
+            if min_bet<= amount <=max_bet:
+                break
+            
+            else:
+                print("Girilen değer "+ {min_bet} + "ve" + {max_bet} +" arasında olmalı!!!")
+        else:
+            print("Lütfen bahis yapacağınızz tutarı rakam ile giriniz.")
+    return amount
+    
+    
+def main():
+    balance = deposit()
+    lines = get_number_of_lines()
+    
+    while True:
+        bet = get_bet()
+        total_bet = bet*lines
+        if bet > balance:
+            print("Hatalı işlem bakiyeniz yeterli değil!!!")
+            print("Bakiye ", balance, "₺")
+        else:
+            break
+        
+    print(f"Bahis tutarınız {bet} {lines} slot .Toplam bahis tutarı {total_bet} ")
+    slots =get_slot_machine_spin(rows, cols, symbol_count)
+    for row in slots:
+        print(" | ".join(row))
+main()
